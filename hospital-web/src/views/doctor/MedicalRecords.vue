@@ -81,11 +81,7 @@ const editId = ref(null);
 const currentPatient = ref(null);
 const saving = ref(false);
 
-async function searchPatients() {
-  if (!searchName.value && !searchIdCard.value) {
-    ElMessage.warning("请输入姓名或身份证号");
-    return;
-  }
+async function doSearch() {
   try {
     const params = {};
     if (searchName.value) params.name = searchName.value;
@@ -96,6 +92,14 @@ async function searchPatients() {
   } catch {
     patients.value = [];
   }
+}
+
+async function searchPatients() {
+  if (!searchName.value && !searchIdCard.value) {
+    ElMessage.warning("请输入姓名或身份证号");
+    return;
+  }
+  await doSearch();
 }
 
 function openAdd(patient) {
@@ -112,7 +116,7 @@ async function handleCreate() {
     ElMessage.success("病历创建成功");
     addVisible.value = false;
     newContent.value = "";
-    searchPatients();
+    doSearch();
   } finally {
     saving.value = false;
   }
@@ -130,7 +134,7 @@ async function handleUpdate() {
     await updateRecord(editId.value, { content: editContent.value });
     ElMessage.success("病历更新成功");
     editVisible.value = false;
-    searchPatients();
+    doSearch();
   } finally {
     saving.value = false;
   }
