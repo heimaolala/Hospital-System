@@ -35,7 +35,7 @@ start "Hospital-Backend" cmd /c "cd /d %~dp0hospital-server && %USERPROFILE%\.m2
 echo Waiting for backend to start...
 :wait_backend
 timeout /t 2 /nobreak >nul
-curl -s http://localhost:8080/api/auth/login >nul 2>&1
+curl -s http://localhost:8080/api/health >nul 2>&1
 if %errorlevel% neq 0 goto wait_backend
 echo [OK] Backend started
 
